@@ -1,7 +1,7 @@
 # CareerTracker Pro
 A standalone web app for tracking job applications. Paste job descriptions and automatically extract company info, roles, deadlines, and more.
 
-## Features\
+## Features
 - **Smart Extraction** - Paste job descriptions to auto-extract company, role, dates, location, compensation, and work authorization
 - **Inline Editing** - Update status and term fields directly in the table
 - **Export to CSV** - Download all applications as Excel-compatible CSV
