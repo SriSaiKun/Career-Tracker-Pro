@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerTracker Pro</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            margin: 0; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: #0f172a;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        .nav-dark {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-dark {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid #475569;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .card-dark:hover {
+            box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -3px rgba(59, 130, 246, 0.6);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -3px rgba(16, 185, 129, 0.6);
+        }
+        
+        .input-dark {
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .input-dark:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background: #1e293b;
+        }
+        
+        .input-dark::placeholder {
+            color: #64748b;
+        }
+        
+        .table-dark {
+            background: #1e293b;
+        }
+        
+        .table-header-dark {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        }
+        
+        .stat-card-dark {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-card-dark:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -3px rgba(59, 130, 246, 0.3);
+        }
+        
+        .badge-dark {
+            transition: all 0.2s ease;
+        }
+        
+        .badge-dark:hover {
+            transform: scale(1.05);
+        }
+        
+        .hero-dark {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #8b5cf6 100%);
+            box-shadow: 0 10px 30px -5px rgba(59, 130, 246, 0.4);
+        }
+        
+        .logo-briefcase {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .logo-arrow {
+            animation: arrowUp 2s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        @keyframes arrowUp {
+            0%, 100% {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-8px);
+                opacity: 0.6;
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+        
+        .shimmer {
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.05) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            background-size: 1000px 100%;
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeInRow {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .fade-in-row {
+            animation: fadeInRow 0.3s ease-out forwards;
+        }
+        
+        @keyframes successPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+        
+        .success-pulse {
+            animation: successPulse 1s ease-out;
+        }
+        
+        .empty-state-dark {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        
+        .table-row-dark:hover {
+            background: #334155 !important;
+        }
+        
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        .editable-cell {
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: #e2e8f0;
+            padding: 6px 10px;
+            border-radius: 6px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        
+        .editable-cell:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            background: #1e293b;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        const CareerLogo = () => (
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g className="logo-briefcase">
+                    <rect x="8" y="16" width="24" height="16" rx="2" stroke="#3b82f6" strokeWidth="2.5" fill="#1e40af"/>
+                    <path d="M14 16V12C14 10.8954 14.8954 10 16 10H24C25.1046 10 26 10.8954 26 12V16" stroke="#60a5fa" strokeWidth="2.5" strokeLinecap="round"/>
+                    <line x1="8" y1="22" x2="32" y2="22" stroke="#3b82f6" strokeWidth="2"/>
+                    <circle cx="20" cy="22" r="1.5" fill="#60a5fa"/>
+                </g>
+                
+                <g className="logo-arrow">
+                    <path d="M20 28 L20 34" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round"/>
+                    <path d="M17 31 L20 28 L23 31" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                </g>
+                
+                <circle cx="30" cy="12" r="2" fill="#fbbf24" opacity="0.8">
+                    <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
+        );
+        
+        const Briefcase = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+        );
+        
+        const Download = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" x2="12" y1="15" y2="3"/>
+            </svg>
+        );
+        
+        const Trash2 = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" x2="10" y1="11" y2="17"/>
+                <line x1="14" x2="14" y1="11" y2="17"/>
+            </svg>
+        );
+
+        const JobTracker = () => {
+            const [applications, setApplications] = useState([]);
+            const [platform, setPlatform] = useState('');
+            const [jobDescription, setJobDescription] = useState('');
+
+            useEffect(() => {
+                const saved = localStorage.getItem('jobApplications');
+                if (saved) {
+                    setApplications(JSON.parse(saved));
+                }
+            }, []);
+
+            useEffect(() => {
+                localStorage.setItem('jobApplications', JSON.stringify(applications));
+            }, [applications]);
+
+            const extractJobData = (description, platformUrl) => {
+                const lines = description.split('\n').filter(line => line.trim());
+                
+                // Extract company name using multiple pattern matching strategies
+                // Tries patterns like: "Company Inc. is", "At Company,", "About Company"
+                let companyName = 'Unknown Company';
+                
+                const companyWithSuffixMatch = description.match(/\b([A-Z][A-Za-z0-9\s&.,'-]+?\s+(?:Inc\.?|LLC|Corp\.?|Ltd\.?|Co\.?|Corporation|Company|Incorporated))\s+is\s+/im);
+                if (companyWithSuffixMatch) {
+                    companyName = companyWithSuffixMatch[1].trim();
+                } else {
+                    const beforeIsMatch = description.match(/\b([A-Z][A-Za-z0-9\s&.,'-]+?)\s+is\s+(a|an|the|your|our|offering|revolutionizing|transforming|changing|building|creating|seeking)/im);
+                    if (beforeIsMatch) {
+                        companyName = beforeIsMatch[1].trim();
+                    } else {
+                        const atCompanyMatch = description.match(/\bAt\s+([A-Z][A-Za-z0-9\s&.,'-]+?(?:\s+(?:Inc\.?|LLC|Corp\.?|Ltd\.?|Co\.?))?)(?:,|\s+we|\s+our|\s+the|\s+you)/i);
+                        if (atCompanyMatch) {
+                            companyName = atCompanyMatch[1].trim();
+                        } else {
+                            const aboutMatch = description.match(/About\s+([A-Z][A-Za-z0-9\s&.,'-]+?)(?:\s+(?:Inc\.?|LLC|Corp\.?|Ltd\.?|Co\.?))?[\n:]/i);
+                            if (aboutMatch) {
+                                const extractedName = aboutMatch[1].trim();
+                                if (!extractedName.match(/^(Additional Information|Company Overview|The Company|Job Description|Role Overview|Requirements|Benefits|Qualifications)/i)) {
+                                    companyName = extractedName;
+                                }
+                            }
+                            
+                            if (companyName === 'Unknown Company' && lines.length > 0) {
+                                const firstLine = lines[0].trim();
+                                if (firstLine.match(/^[A-Z]/) && 
+                                    firstLine.length < 60 && 
+                                    !firstLine.match(/^(Posted|Apply|Save|Share|At|Internet|Software|Engineering|Remote|On-site|Hybrid|Full-time|Part-time|Backend|Frontend|Developer|Dev|Engineer|Full Stack|Additional Information|Company Overview|About)/i)) {
+                                    companyName = firstLine;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                companyName = companyName.replace(/\s+is\s+(an?|the|your|our)\s*.*/i, '').trim();
+                companyName = companyName.replace(/\s+(logo|careers|jobs|hiring)$/i, '').trim();
+                companyName = companyName.replace(/[,;:]$/, '').trim();
+                if (!companyWithSuffixMatch && !description.match(new RegExp(`At\\s+${companyName}\\s+(?:Inc|LLC|Corp|Ltd)`,'i'))) {
+                    companyName = companyName.replace(/\s+(Inc\.?|LLC|Corp\.?|Ltd\.?|Co\.?|Corporation|Company|Incorporated)$/i, '').trim();
+                }
+
+                // Extract job role - first tries to find job title in first line,
+                // then appends "Internship" if needed, or falls back to pattern matching
+                let role = 'Internship';
+                
+                let jobTitle = '';
+                if (lines.length > 0) {
+                    const firstLine = lines[0].trim();
+                    if (firstLine.length < 50 && 
+                        firstLine.match(/^[A-Z]/) && 
+                        firstLine.match(/\b(Developer|Dev|Engineer|Designer|Analyst|Manager|Specialist|Architect|Lead|Senior|Junior|Backend|Frontend|Full[- ]?Stack|Software|Web|Mobile|Data|Product|Marketing|Sales|UI|UX)\b/i) &&
+                        !firstLine.match(/^(Posted|Apply|Save|Share|At a glance)/i)) {
+                        jobTitle = firstLine;
+                    }
+                }
+                
+                const isInternship = description.match(/\b(intern|internship)\b/i);
+                
+                if (jobTitle && isInternship) {
+                    if (!jobTitle.match(/\b(intern|internship)\b/i)) {
+                        role = `${jobTitle} Internship`;
+                    } else {
+                        role = jobTitle;
+                    }
+                } else if (jobTitle) {
+                    role = jobTitle;
+                } else {
+                    const rolePatterns = [
+                        /^((?:Student|Junior|Senior)?\s*(?:Software|Web|Mobile|Data|Product|Design|Marketing|Business|Finance|Sales|Frontend|Backend|Full[- ]?Stack)?\s*(?:Developer|Dev|Engineer|Designer|Analyst|Manager|Intern|Internship|Associate|Specialist)(?:\s+Intern(?:ship)?)?)/im,
+                        /^([A-Z][A-Za-z\s]+(?:Intern|Internship|Developer|Engineer))/m,
+                    ];
+                    
+                    for (const pattern of rolePatterns) {
+                        const roleMatch = description.match(pattern);
+                        if (roleMatch) {
+                            role = roleMatch[1].trim();
+                            break;
+                        }
+                    }
+                }
+
+                let locationType = 'On-Site';
+                
+                if (description.match(/\b(remote|work from home|wfh|distributed team)\b/i)) {
+                    locationType = 'Remote';
+                } else if (description.match(/\b(hybrid|flexible)\b/i)) {
+                    locationType = 'Hybrid';
+                }
+
+                let compensation = 'Unpaid';
+                
+                if (description.match(/\b(paid|compensation|salary|\$\d+|stipend|wage)\b/i)) {
+                    compensation = 'Paid';
+                }
+                
+                if (description.match(/\b(unpaid|volunteer|no compensation)\b/i)) {
+                    compensation = 'Unpaid';
+                }
+
+                let jobType = 'Part-time';
+                
+                if (description.match(/\b(full[- ]time|40\s*hours|full time)\b/i)) {
+                    jobType = 'Full-time';
+                } else if (description.match(/\b(part[- ]time|part time|flexible hours)\b/i)) {
+                    jobType = 'Part-time';
+                }
+
+                // Detect US work authorization requirements (checks for required vs sponsorship available)
+                let workAuth = 'Not Specified';
+                
+                if (description.match(/\b(?:us|u\.s\.|united states)\s+work\s+authorization\s+required/i)) {
+                    workAuth = 'Required';
+                } else if (description.match(/\b(require[sd]?\s+(?:us|u\.s\.|united states)?\s*(?:work authorization|work auth|authorization to work)|must be authorized to work in (?:the )?(?:us|u\.s\.|united states)|sponsorship (?:is )?not available)\b/i)) {
+                    workAuth = 'Required';
+                } else if (description.match(/\b(no (?:visa )?sponsorship|citizens? only|permanent resident)\b/i)) {
+                    workAuth = 'Required';
+                } else if (description.match(/\b(will sponsor|visa sponsorship available|h1b|opt|cpt|open to candidates with|eligible for visa sponsorship)\b/i)) {
+                    workAuth = 'Not Required';
+                }
+
+                let applicationOpens = 'Not Specified';
+                
+                // Convert relative time (e.g., "Posted 3 days ago") to actual date
+                const postedAgoMatch = description.match(/Posted\s+(\d+)\s+(minute|hour|day|week|month)s?\s+ago/i);
+                if (postedAgoMatch) {
+                    const amount = parseInt(postedAgoMatch[1]);
+                    const unit = postedAgoMatch[2].toLowerCase();
+                    const now = new Date();
+                    
+                    switch(unit) {
+                        case 'minute':
+                            now.setMinutes(now.getMinutes() - amount);
+                            break;
+                        case 'hour':
+                            now.setHours(now.getHours() - amount);
+                            break;
+                        case 'day':
+                            now.setDate(now.getDate() - amount);
+                            break;
+                        case 'week':
+                            now.setDate(now.getDate() - (amount * 7));
+                            break;
+                        case 'month':
+                            now.setMonth(now.getMonth() - amount);
+                            break;
+                    }
+                    
+                    applicationOpens = now.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                } else {
+                    const opensPatterns = [
+                        /(?:application|applications|position)\s+(?:opens?|available|starts?)\s+(?:on|from)?\s*:?\s*([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})/i,
+                        /(?:opens?|available|starts?)\s+(?:on|from)?\s*:?\s*([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})/i,
+                        /(?:open\s+date|opening\s+date)\s*:?\s*([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})/i,
+                    ];
+                    
+                    for (const pattern of opensPatterns) {
+                        const match = description.match(pattern);
+                        if (match) {
+                            applicationOpens = match[1].trim();
+                            break;
+                        }
+                    }
+                }
+
+                // Extract deadline with optional time (e.g., "Apply by December 15, 2024 at 11:59 PM")
+                let applicationCloses = 'Not Specified';
+                
+                const closesWithTimeMatch = description.match(/(?:apply\s+by|deadline|due)\s*:?\s*([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})\s+at\s+(\d{1,2}:\d{2}\s*(?:AM|PM|am|pm))/i);
+                if (closesWithTimeMatch) {
+                    applicationCloses = `${closesWithTimeMatch[1]} at ${closesWithTimeMatch[2]}`;
+                } else {
+                    const closesPatterns = [
+                        /(?:apply\s+by|deadline|due|closes?|applications?\s+close)\s*:?\s*([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})/i,
+                        /(?:deadline|due\s+date|closing\s+date)\s*:?\s*([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})/i,
+                        /(?:closes?|ends?)\s+(?:on)?\s*:?\s*([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})/i,
+                        /(?:application|position)\s+(?:closes?|ends?)\s+(?:on)?\s*:?\s*([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})/i,
+                    ];
+                    
+                    for (const pattern of closesPatterns) {
+                        const match = description.match(pattern);
+                        if (match) {
+                            applicationCloses = match[1].trim();
+                            break;
+                        }
+                    }
+                }
+
+                return {
+                    companyName,
+                    platform: platformUrl || 'Direct',
+                    role,
+                    locationType,
+                    compensation,
+                    jobType,
+                    workAuth,
+                    applicationOpens,
+                    applicationCloses,
+                    term: '',
+                    status: 'Applied',
+                    applicationDate: new Date().toLocaleDateString('en-US'),
+                    id: Date.now()
+                };
+            };
+
+            const handleAddJob = () => {
+                if (!platform.trim()) {
+                    alert('Please enter the platform or company website');
+                    return;
+                }
+                
+                if (!jobDescription.trim()) {
+                    alert('Please paste a job description');
+                    return;
+                }
+
+                const jobData = extractJobData(jobDescription, platform);
+                setApplications([...applications, jobData]);
+                setPlatform('');
+                setJobDescription('');
+            };
+
+            const handleDelete = (id) => {
+                if (window.confirm('Are you sure you want to delete this application?')) {
+                    setApplications(applications.filter(app => app.id !== id));
+                }
+            };
+
+            const handleStatusChange = (id, newStatus) => {
+                setApplications(applications.map(app => 
+                    app.id === id ? { ...app, status: newStatus } : app
+                ));
+            };
+
+            const handleTermChange = (id, newTerm) => {
+                setApplications(applications.map(app => 
+                    app.id === id ? { ...app, term: newTerm } : app
+                ));
+            };
+
+            // Export applications to CSV format compatible with Excel
+            const handleExportToCSV = () => {
+                const headers = ['Company Name', 'Website', 'Job Role', 'Term', 'Application Date', 'Application Status', 'Work Location', 'Paid/Unpaid', 'Job Type', 'US Work Auth', 'Application Opens', 'Application Closes'];
+                const csvContent = [
+                    headers.join(','),
+                    ...applications.map(app => [
+                        `"${app.companyName}"`,
+                        `"${app.platform}"`,
+                        `"${app.role}"`,
+                        `"${app.term || ''}"`,
+                        `"${app.applicationDate}"`,
+                        `"${app.status}"`,
+                        `"${app.locationType}"`,
+                        `"${app.compensation}"`,
+                        `"${app.jobType}"`,
+                        `"${app.workAuth}"`,
+                        `"${app.applicationOpens || 'Not Specified'}"`,
+                        `"${app.applicationCloses || 'Not Specified'}"`
+                    ].join(','))
+                ].join('\n');
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', `job-applications-${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            const statusColors = {
+                'Applied': 'bg-blue-500 text-white border-blue-600',
+                'Interview': 'bg-amber-500 text-white border-amber-600',
+                'Rejected': 'bg-red-500 text-white border-red-600',
+                'Offer': 'bg-emerald-500 text-white border-emerald-600',
+                'Accepted': 'bg-violet-500 text-white border-violet-600'
+            };
+
+            return (
+                <div className="min-h-screen" style={{background: '#0f172a'}}>
+                    <nav className="nav-dark sticky top-0 z-50">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex items-center justify-between h-16">
+                                <div className="flex items-center gap-3">
+                                    <CareerLogo />
+                                    <span className="text-2xl font-bold gradient-text">CareerTracker Pro</span>
+                                </div>
+                                <div className="text-sm text-blue-300 font-semibold bg-blue-900/30 px-4 py-2 rounded-full shimmer">
+                                    {applications.length} Applications Tracked
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        <div className="hero-dark rounded-2xl p-8 mb-8 text-white slide-in">
+                            <h1 className="text-4xl font-bold mb-2">Welcome to CareerTracker Pro</h1>
+                            <p className="text-blue-100 text-lg">Your AI-powered companion for landing your dream job. Track every opportunity, deadline, and interview with intelligent automation.</p>
+                        </div>
+
+                        <div className="card-dark rounded-2xl p-8 mb-8 slide-in">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                </div>
+                                <h2 className="text-2xl font-bold text-white">Add New Application</h2>
+                            </div>
+                            
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-300 mb-2">
+                                        Platform / Company Website
+                                        <span className="text-red-400 ml-1">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={platform}
+                                        onChange={(e) => setPlatform(e.target.value)}
+                                        placeholder="e.g., LinkedIn, Indeed, company.com"
+                                        className="w-full px-4 py-3 input-dark rounded-xl"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-300 mb-2">
+                                        Job Description
+                                        <span className="text-red-400 ml-1">*</span>
+                                    </label>
+                                    <textarea
+                                        value={jobDescription}
+                                        onChange={(e) => setJobDescription(e.target.value)}
+                                        placeholder="Paste the complete job description here. Simply copy and paste - we'll handle the rest with smart data extraction."
+                                        rows="10"
+                                        className="w-full px-4 py-3 input-dark rounded-xl resize-none font-mono text-sm"
+                                    />
+                                </div>
+
+                                <button
+                                    onClick={handleAddJob}
+                                    className="w-full btn-primary text-white font-bold py-4 px-6 rounded-xl"
+                                >
+                                    Add Application
+                                </button>
+                            </div>
+                        </div>
+
+                        {applications.length > 0 && (
+                            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8 slide-in">
+                                {['Applied', 'Interview', 'Rejected', 'Offer', 'Accepted'].map(status => {
+                                    const count = applications.filter(app => app.status === status).length;
+                                    return (
+                                        <div key={status} className="stat-card-dark rounded-xl p-6">
+                                            <div className="text-4xl font-bold text-white mb-2">{count}</div>
+                                            <div className="text-sm font-semibold text-gray-400 uppercase tracking-wide">{status}</div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+
+                        <div className="card-dark rounded-2xl overflow-hidden slide-in">
+                            <div className="p-6 border-b border-slate-600">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-white">Your Applications</h2>
+                                        <p className="text-gray-400 mt-1">Track and manage all your career opportunities</p>
+                                    </div>
+                                    {applications.length > 0 && (
+                                        <button
+                                            onClick={handleExportToCSV}
+                                            className="flex items-center gap-2 btn-secondary text-white font-bold py-3 px-6 rounded-xl"
+                                        >
+                                            <Download />
+                                            Download as Excel
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {applications.length === 0 ? (
+                                <div className="empty-state-dark text-center py-24">
+                                    <div className="inline-block p-5 bg-slate-700/50 rounded-full mb-4">
+                                        <Briefcase />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white mb-2">No Applications Yet</h3>
+                                    <p className="text-gray-400 text-lg">Begin your career journey by adding your first application above</p>
+                                </div>
+                            ) : (
+                                <div className="overflow-x-auto">
+                                    <table className="w-full">
+                                        <thead>
+                                            <tr className="table-header-dark text-white">
+                                                <th className="text-left p-4 font-bold">Company</th>
+                                                <th className="text-left p-4 font-bold">Website</th>
+                                                <th className="text-left p-4 font-bold">Role</th>
+                                                <th className="text-left p-4 font-bold">Term</th>
+                                                <th className="text-left p-4 font-bold">Date Applied</th>
+                                                <th className="text-left p-4 font-bold">Status</th>
+                                                <th className="text-left p-4 font-bold">Location</th>
+                                                <th className="text-left p-4 font-bold">Compensation</th>
+                                                <th className="text-left p-4 font-bold">Type</th>
+                                                <th className="text-left p-4 font-bold">Work Auth</th>
+                                                <th className="text-left p-4 font-bold">Application Opens</th>
+                                                <th className="text-left p-4 font-bold">Application Closes</th>
+                                                <th className="text-left p-4 font-bold">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="table-dark">
+                                            {applications.map((app, index) => (
+                                                <tr 
+                                                    key={app.id}
+                                                    className={`border-b border-slate-700 transition-all table-row-dark fade-in-row ${index % 2 === 0 ? 'bg-slate-800/50' : 'bg-slate-900/50'}`}
+                                                    style={{animationDelay: `${index * 0.05}s`}}
+                                                >
+                                                    <td className="p-4 font-bold text-white" style={{minWidth: '150px'}}>{app.companyName}</td>
+                                                    <td className="p-4 text-gray-300" style={{minWidth: '120px'}}>{app.platform}</td>
+                                                    <td className="p-4 text-gray-300 font-semibold" style={{minWidth: '200px'}}>{app.role}</td>
+                                                    <td className="p-4" style={{minWidth: '240px'}}>
+                                                        <input
+                                                            type="text"
+                                                            value={app.term || ''}
+                                                            onChange={(e) => handleTermChange(app.id, e.target.value)}
+                                                            placeholder="Type here e.g., Spring 2025"
+                                                            className="editable-cell text-sm"
+                                                            style={{minWidth: '220px'}}
+                                                        />
+                                                    </td>
+                                                    <td className="p-4 text-gray-400" style={{minWidth: '110px'}}>{app.applicationDate}</td>
+                                                    <td className="p-4" style={{minWidth: '140px'}}>
+                                                        <select
+                                                            value={app.status}
+                                                            onChange={(e) => handleStatusChange(app.id, e.target.value)}
+                                                            className={`px-3 py-2 rounded-lg border-2 font-bold cursor-pointer text-sm badge-dark ${statusColors[app.status]}`}
+                                                        >
+                                                            <option value="Applied">Applied</option>
+                                                            <option value="Interview">Interview</option>
+                                                            <option value="Rejected">Rejected</option>
+                                                            <option value="Offer">Offer</option>
+                                                            <option value="Accepted">Accepted</option>
+                                                        </select>
+                                                    </td>
+                                                    <td className="p-4 text-gray-400" style={{minWidth: '120px'}}>{app.locationType}</td>
+                                                    <td className="p-4 text-gray-400" style={{minWidth: '140px'}}>{app.compensation}</td>
+                                                    <td className="p-4 text-gray-400" style={{minWidth: '100px'}}>{app.jobType || 'Part-time'}</td>
+                                                    <td className="p-4 text-gray-400" style={{minWidth: '130px'}}>{app.workAuth || 'Not Specified'}</td>
+                                                    <td className="p-4 text-gray-300" style={{minWidth: '150px'}}>{app.applicationOpens || 'Not Specified'}</td>
+                                                    <td className="p-4 text-gray-300" style={{minWidth: '200px'}}>{app.applicationCloses || 'Not Specified'}</td>
+                                                    <td className="p-4">
+                                                        <button
+                                                            onClick={() => handleDelete(app.id)}
+                                                            className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-all hover:scale-110"
+                                                            title="Delete application"
+                                                        >
+                                                            <Trash2 />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(
+            <React.StrictMode>
+                <JobTracker />
+            </React.StrictMode>
+        );
+    </script>
+</body>
+</html>
