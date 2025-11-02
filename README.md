@@ -22,7 +22,7 @@ Backend:
 ```
 
 ## Quick Start
-1. Download `job-tracker-updated.html`
+1. Download `Job-Tracker.html`
 2. Double-click to open in any browser
 3. Start tracking immediately
 
