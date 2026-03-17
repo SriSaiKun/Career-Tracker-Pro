@@ -17,7 +17,6 @@ Frontend:
 - JavaScript (no build process)
 
 Backend:
-- None (fully client-side)
 - localStorage for data persistence
 ```
 
